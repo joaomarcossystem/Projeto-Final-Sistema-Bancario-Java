@@ -1,12 +1,29 @@
 package com.unileste.projetofinal.gui;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class MainFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
+    
+    private ArrayList<String> listaDeClientes = new ArrayList<>();
+    
+    private ArrayList<String> listaDeCpfs = new ArrayList<>();
 
     public MainFrame() {
         initComponents();
     }
+    
+        private void atualizarComboClientes() {
+        comboNomeProprietario.removeAllItems();
+
+        for (String nome : listaDeClientes) {
+            comboNomeProprietario.addItem(nome);
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -43,6 +60,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnAtualizarClientes = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
+        btnExcluirLinha = new javax.swing.JButton();
         pnlOperacoes = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -72,12 +90,14 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         comboTipoConta = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
-        txtCpfProprietario = new javax.swing.JTextField();
-        txtLimite = new javax.swing.JTextField();
+        txtSaldo = new javax.swing.JTextField();
         btnCriarConta = new javax.swing.JButton();
         btnAtualizarConta = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblConta = new javax.swing.JTable();
+        jLabel15 = new javax.swing.JLabel();
+        comboNomeProprietario = new javax.swing.JComboBox<>();
+        lblCpfDoProp = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Principal");
@@ -327,15 +347,22 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         btnCadastrarCliente.setText("Cadastrar");
+        btnCadastrarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarClienteActionPerformed(evt);
+            }
+        });
 
         btnAtualizarClientes.setText("Atualizar");
+        btnAtualizarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarClientesActionPerformed(evt);
+            }
+        });
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Nome", "CPF", "Endereço", "Qtd de Contas"
@@ -343,12 +370,22 @@ public class MainFrame extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblClientes);
 
+        btnExcluirLinha.setText("Excluir");
+        btnExcluirLinha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirLinhaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlClienteLayout = new javax.swing.GroupLayout(pnlCliente);
         pnlCliente.setLayout(pnlClienteLayout);
         pnlClienteLayout.setHorizontalGroup(
             pnlClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlClienteLayout.createSequentialGroup()
                 .addGroup(pnlClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlClienteLayout.createSequentialGroup()
+                        .addGap(250, 250, 250)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlClienteLayout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addGroup(pnlClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -366,10 +403,8 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(btnCadastrarCliente)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnAtualizarClientes))
-                            .addComponent(jScrollPane1)))
-                    .addGroup(pnlClienteLayout.createSequentialGroup()
-                        .addGap(250, 250, 250)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane1)
+                            .addComponent(btnExcluirLinha, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap(82, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlClienteLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -396,9 +431,11 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(pnlClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrarCliente)
                     .addComponent(btnAtualizarClientes))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
+                .addGap(31, 31, 31)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnExcluirLinha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addComponent(jLabel2))
         );
 
@@ -601,24 +638,47 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setText("Limite");
+        jLabel10.setText("Saldo");
+
+        txtSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSaldoActionPerformed(evt);
+            }
+        });
 
         btnCriarConta.setText("Criar conta");
+        btnCriarConta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCriarContaActionPerformed(evt);
+            }
+        });
 
         btnAtualizarConta.setText("Atualizar Conta");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblConta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Número", "Tipo", "Cpf", "Saldo", "Limite"
+                "Número", "Tipo", "Cpf", "Saldo"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblConta);
+
+        jLabel15.setText("Nome proprietário");
+
+        comboNomeProprietario.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboNomeProprietarioItemStateChanged(evt);
+            }
+        });
+        comboNomeProprietario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboNomeProprietarioActionPerformed(evt);
+            }
+        });
+
+        lblCpfDoProp.setText("0");
 
         javax.swing.GroupLayout pnlContaLayout = new javax.swing.GroupLayout(pnlConta);
         pnlConta.setLayout(pnlContaLayout);
@@ -631,26 +691,30 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(pnlContaLayout.createSequentialGroup()
                 .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlContaLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(btnCriarConta)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAtualizarConta))
+                    .addGroup(pnlContaLayout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(pnlContaLayout.createSequentialGroup()
                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtLimite))
+                                .addComponent(txtSaldo))
                             .addGroup(pnlContaLayout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCpfProprietario))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblCpfDoProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(pnlContaLayout.createSequentialGroup()
                                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comboTipoConta, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(pnlContaLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(btnCriarConta)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAtualizarConta)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(comboTipoConta, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlContaLayout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addGap(18, 18, 18)
+                                .addComponent(comboNomeProprietario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(279, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
@@ -659,25 +723,29 @@ public class MainFrame extends javax.swing.JFrame {
         pnlContaLayout.setVerticalGroup(
             pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContaLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap(66, Short.MAX_VALUE)
+                .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(comboNomeProprietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(txtCpfProprietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
+                    .addComponent(lblCpfDoProp))
+                .addGap(25, 25, 25)
                 .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(comboTipoConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(txtLimite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(pnlContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCriarConta)
                     .addComponent(btnAtualizarConta))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(93, 93, 93)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -710,6 +778,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnIrParaOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaOpActionPerformed
         tabPaineis.setSelectedComponent(pnlOperacoes); 
+        
+        atualizarComboClientes();
     }//GEN-LAST:event_btnIrParaOpActionPerformed
 
     private void btnIrParaOpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIrParaOpMouseClicked
@@ -722,17 +792,26 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnIrParaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaClienteActionPerformed
         // TODO add your handling code here:
-        tabPaineis.setSelectedComponent(pnlCliente);  
+        tabPaineis.setSelectedComponent(pnlCliente); 
+        
+        atualizarComboClientes();
+
     }//GEN-LAST:event_btnIrParaClienteActionPerformed
 
     private void btnIrParaContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaContaActionPerformed
         // TODO add your handling code here:
         tabPaineis.setSelectedComponent(pnlConta); 
+        
+        atualizarComboClientes();
+
     }//GEN-LAST:event_btnIrParaContaActionPerformed
 
     private void btnIrParaSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaSobreActionPerformed
         // TODO add your handling code here:
         tabPaineis.setSelectedComponent(pnlSobre); 
+        
+        atualizarComboClientes();
+
     }//GEN-LAST:event_btnIrParaSobreActionPerformed
 
     private void comboTipoContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoContaActionPerformed
@@ -762,6 +841,88 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnProximaPaginaActionPerformed
 
+    private void btnCadastrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarClienteActionPerformed
+        // TODO add your handling code here:
+        String nome = txtNome.getText();
+        String cpf = txtCpf.getText();
+        String endereco = txtEndereco.getText();
+        
+        
+        DefaultTableModel tabelaCliente = (DefaultTableModel) tblClientes.getModel();
+        
+        Object [] novoCliente= new Object []{
+            nome,
+            cpf,
+            endereco
+        };
+        
+        tabelaCliente.addRow(novoCliente);
+        
+        listaDeClientes.add(nome);
+        listaDeCpfs.add(cpf);
+        atualizarComboClientes();
+
+    }//GEN-LAST:event_btnCadastrarClienteActionPerformed
+
+    private void btnAtualizarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarClientesActionPerformed
+        // TODO add your handling code here:
+        txtNome.setText("");
+        txtCpf.setText("");
+        txtEndereco.setText("");
+    }//GEN-LAST:event_btnAtualizarClientesActionPerformed
+
+    private void btnExcluirLinhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirLinhaActionPerformed
+        // TODO add your handling code here:
+        int linhaSelecionada = tblClientes.getSelectedRow();
+        
+        if(linhaSelecionada == -1){
+            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada para excluir");
+        } else{
+            DefaultTableModel tabelaCliente = (DefaultTableModel) tblClientes.getModel();
+            
+            tabelaCliente.removeRow(linhaSelecionada);
+        }
+    }//GEN-LAST:event_btnExcluirLinhaActionPerformed
+
+    private void btnCriarContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarContaActionPerformed
+        // TODO add your handling code here:
+        int numero = (int)(Math.random() * 100); // 0 a 99
+        String.valueOf(numero);
+        String tipoConta = comboTipoConta.getSelectedItem().toString();
+        String saldo = txtSaldo.getText();
+        
+        String cpf = lblCpfDoProp.getText();
+        
+        DefaultTableModel tabelaContas = (DefaultTableModel) tblConta.getModel();
+        
+        Object [] novaConta = new Object []{
+            numero,
+            tipoConta,
+            cpf,
+            saldo,
+        };
+        
+        tabelaContas.addRow(novaConta);
+        
+    }//GEN-LAST:event_btnCriarContaActionPerformed
+
+    private void comboNomeProprietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboNomeProprietarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboNomeProprietarioActionPerformed
+
+    private void txtSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaldoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSaldoActionPerformed
+
+    private void comboNomeProprietarioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboNomeProprietarioItemStateChanged
+        // TODO add your handling code here:
+        int index = comboNomeProprietario.getSelectedIndex();
+    
+    if (index >= 0 && index < listaDeCpfs.size()) {
+        lblCpfDoProp.setText(listaDeCpfs.get(index));
+    }
+    }//GEN-LAST:event_comboNomeProprietarioItemStateChanged
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
     }
@@ -773,6 +934,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnCadastrarCliente;
     private javax.swing.JButton btnCriarConta;
     private javax.swing.JButton btnDepositar;
+    private javax.swing.JButton btnExcluirLinha;
     private javax.swing.JButton btnIrParaCliente;
     private javax.swing.JButton btnIrParaConta;
     private javax.swing.JButton btnIrParaOp;
@@ -781,6 +943,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSacar;
     private javax.swing.JButton btnTransferir;
     private javax.swing.JButton btnVoltarPagina;
+    private javax.swing.JComboBox<String> comboNomeProprietario;
     private javax.swing.JComboBox<String> comboTipoConta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -788,6 +951,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -809,8 +973,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCPF;
+    private javax.swing.JLabel lblCpfDoProp;
     private javax.swing.JLabel lblEndereco;
     private javax.swing.JLabel lblNome;
     private javax.swing.JPanel pnlBarraEsquerda;
@@ -821,15 +985,15 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel pnlTitulo;
     private javax.swing.JTabbedPane tabPaineis;
     private javax.swing.JTable tblClientes;
+    private javax.swing.JTable tblConta;
     private javax.swing.JTextField txtContaDeposito;
     private javax.swing.JTextField txtContaDestino;
     private javax.swing.JTextField txtContaOrigem;
     private javax.swing.JTextField txtContaSaque;
     private javax.swing.JTextField txtCpf;
-    private javax.swing.JTextField txtCpfProprietario;
     private javax.swing.JTextField txtEndereco;
-    private javax.swing.JTextField txtLimite;
     private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtSaldo;
     private javax.swing.JTextField txtValorDeposito;
     private javax.swing.JTextField txtValorSaque;
     private javax.swing.JTextField txtValortranferencia;
