@@ -12,7 +12,7 @@ public abstract class Conta {
     private Cliente proprietario;
     private List<String> historicoTransacoes;
 
-    public Conta(String numero, Cliente proprietario) {
+        public Conta(String numero, Cliente proprietario, double saldoInicial) {
         if (numero == null || numero.isBlank()) {
             throw new IllegalArgumentException("Número da conta inválido.");
         }
@@ -21,12 +21,13 @@ public abstract class Conta {
         }
 
         this.numero = numero;
-        this.saldo = 0.0;
+        this.saldo = saldoInicial;   // <- AQUI!!!
         this.proprietario = proprietario;
         this.historicoTransacoes = new ArrayList<>();
 
         proprietario.adicionarConta(this);
     }
+
 
     public String getNumero() {
         return numero;

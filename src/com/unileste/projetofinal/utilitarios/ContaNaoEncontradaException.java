@@ -1,5 +1,8 @@
 package com.unileste.projetofinal.utilitarios;
 
-public class ContaNaoEncontradaException {
-   //código 
+public class ContaNaoEncontradaException extends Exception {
+    
+    public ContaNaoEncontradaException(String mensagem) {
+        super(mensagem);
+    }
 }

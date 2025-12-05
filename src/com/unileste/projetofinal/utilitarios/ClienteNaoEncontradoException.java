@@ -1,5 +1,8 @@
 package com.unileste.projetofinal.utilitarios;
 
-public class ClienteNaoEncontradoException {
-    //código
+public class ClienteNaoEncontradoException extends Exception {
+    
+    public ClienteNaoEncontradoException(String mensagem) {
+        super(mensagem);
+    }
 }

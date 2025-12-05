@@ -6,9 +6,10 @@ public class ContaPoupanca extends Conta {
 
     private double taxaRendimentoMensal = 0.005; // opcional
 
-    public ContaPoupanca(String numero, Cliente proprietario) {
-        super(numero, proprietario);
-    }
+    public ContaPoupanca(String numero, Cliente proprietario, double saldoInicial) {
+    super(numero, proprietario, saldoInicial);
+}
+
 
     @Override
     public void depositar(double valor) {
