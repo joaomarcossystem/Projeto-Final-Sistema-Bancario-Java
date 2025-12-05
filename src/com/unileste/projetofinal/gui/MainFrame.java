@@ -832,14 +832,23 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_comboTipoContaActionPerformed
 
     private void btnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositarActionPerformed
-        // TODO add your handling code here:
-            try {
+        try {
             String numero = txtContaDeposito.getText().trim();
             double valor = Double.parseDouble(txtValorDeposito.getText());
 
             banco.realizarDeposito(numero, valor);
 
-            JOptionPane.showMessageDialog(this, "Depósito realizado!");
+            // REBUSCAR A CONTA ATUALIZADA
+            Conta contaAtualizada = banco.buscarConta(numero);
+
+            String comprovante = banco.gerarComprovante(
+                    "Depósito",
+                    contaAtualizada,  // agora está com saldo atualizado!
+                    null,
+                    valor
+            );
+
+            JOptionPane.showMessageDialog(this, comprovante);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -954,14 +963,22 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_comboNomeProprietarioItemStateChanged
 
     private void btnSacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacarActionPerformed
-        // TODO add your handling code here:
-            try {
+        try {
             String numero = txtContaSaque.getText().trim();
             double valor = Double.parseDouble(txtValorSaque.getText());
 
             banco.realizarSaque(numero, valor);
 
-            JOptionPane.showMessageDialog(this, "Saque realizado!");
+            Conta contaAtualizada = banco.buscarConta(numero);
+
+            String comprovante = banco.gerarComprovante(
+                    "Saque",
+                    contaAtualizada,
+                    null,
+                    valor
+            );
+
+            JOptionPane.showMessageDialog(this, comprovante);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -969,15 +986,25 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSacarActionPerformed
 
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
-        // TODO add your handling code here:
-            try {
+        try {
             String origem = txtContaOrigem.getText().trim();
             String destino = txtContaDestino.getText().trim();
             double valor = Double.parseDouble(txtValorTransferencia.getText());
 
             banco.realizarTransferencia(origem, destino, valor);
 
-            JOptionPane.showMessageDialog(this, "Transferência realizada!");
+            // rebuscar contas atualizadas
+            Conta contaOrigemAtualizada = banco.buscarConta(origem);
+            Conta contaDestinoAtualizada = banco.buscarConta(destino);
+
+            String comprovante = banco.gerarComprovante(
+                    "Transferência",
+                    contaOrigemAtualizada,
+                    contaDestinoAtualizada,
+                    valor
+            );
+
+            JOptionPane.showMessageDialog(this, comprovante);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());

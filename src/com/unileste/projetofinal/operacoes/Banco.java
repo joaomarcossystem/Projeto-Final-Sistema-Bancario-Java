@@ -60,7 +60,7 @@ public class Banco {
 
     // ---------------- ABERTURA DE CONTA ----------------
 
-    public Conta abrirConta(Cliente cliente, String tipoConta, double... parametros) {
+        public Conta abrirConta(Cliente cliente, String tipoConta, double... parametros) {
         if (cliente == null) {
             throw new IllegalArgumentException("Cliente inválido.");
         }
@@ -68,12 +68,26 @@ public class Banco {
         String numeroConta = String.valueOf(proximoNumeroConta++);
         Conta novaConta;
 
+        double saldoInicial = (parametros.length > 0) ? parametros[0] : 0.0;
+
         if (tipoConta.equalsIgnoreCase("corrente")) {
-            double limite = (parametros.length > 0) ? parametros[0] : 0.0;
-            novaConta = new ContaCorrente(numeroConta, cliente, limite);
+
+            double limite = (parametros.length > 1) ? parametros[1] : 0.0;
+
+            novaConta = new ContaCorrente(
+                    numeroConta,
+                    cliente,
+                    saldoInicial,
+                    limite
+            );
 
         } else if (tipoConta.equalsIgnoreCase("poupanca")) {
-            novaConta = new ContaPoupanca(numeroConta, cliente);
+
+            novaConta = new ContaPoupanca(
+                    numeroConta,
+                    cliente,
+                    saldoInicial
+            );
 
         } else {
             throw new IllegalArgumentException("Tipo de conta inválido.");
@@ -128,5 +142,30 @@ public class Banco {
         return nomeBanco;
     }
     
+    //------------- mensagem de comprovante
     
+            public String gerarComprovante(String operacao, Conta origem, Conta destino, double valor) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("=== COMPROVANTE DE ").append(operacao.toUpperCase()).append(" ===\n\n");
+        sb.append("Valor: R$ ").append(valor).append("\n\n");
+
+        if (origem != null) {
+            sb.append("Conta Origem: ").append(origem.getNumero()).append("\n");
+            sb.append("Titular: ").append(origem.getProprietario().getNome()).append("\n");
+            sb.append("CPF: ").append(origem.getProprietario().getCpf()).append("\n");
+            sb.append("Saldo Atual: ").append(origem.getSaldo()).append("\n\n");
+        }
+
+        if (destino != null) {
+            sb.append("Conta Destino: ").append(destino.getNumero()).append("\n");
+            sb.append("Titular: ").append(destino.getProprietario().getNome()).append("\n");
+            sb.append("CPF: ").append(destino.getProprietario().getCpf()).append("\n");
+            sb.append("Saldo Atual: ").append(destino.getSaldo()).append("\n");
+        }
+
+        sb.append("\nData/Hora: ").append(java.time.LocalDateTime.now()).append("\n");
+
+        return sb.toString();
+    }
 }
