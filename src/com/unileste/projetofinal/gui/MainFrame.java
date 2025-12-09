@@ -139,12 +139,12 @@ public class MainFrame extends javax.swing.JFrame {
         txtContaDeposito = new javax.swing.JTextField();
         txtValorDeposito = new javax.swing.JTextField();
         btnDepositar = new javax.swing.JButton();
-        txtValorSaque = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtContaSaque = new javax.swing.JTextField();
         btnSacar = new javax.swing.JButton();
+        txtValorSaque = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -706,8 +706,13 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel14)
                     .addComponent(jLabel13))
-                .addGap(31, 31, 31)
-                .addComponent(txtContaSaque)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(txtContaSaque))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(85, 85, 85)
                 .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(142, 142, 142))
@@ -721,8 +726,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(txtContaSaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel14))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14)
+                            .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(btnSacar)))
@@ -821,34 +828,26 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(pnlOperacoesLayout.createSequentialGroup()
                 .addGap(99, 99, 99)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlOperacoesLayout.createSequentialGroup()
-                    .addGap(236, 236, 236)
-                    .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(236, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOperacoesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         pnlOperacoesLayout.setVerticalGroup(
             pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOperacoesLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlOperacoesLayout.createSequentialGroup()
-                    .addGap(256, 256, 256)
-                    .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(257, Short.MAX_VALUE)))
         );
 
         tabPaineis.addTab("Operações", pnlOperacoes);
@@ -910,29 +909,37 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositarActionPerformed
         try {
-            String numero = txtContaDeposito.getText().trim();
-            double valor = Double.parseDouble(txtValorDeposito.getText());
+        String numero = txtContaDeposito.getText().trim();
+        double valor = Double.parseDouble(txtValorDeposito.getText());
 
-            banco.realizarDeposito(numero, valor);
+        // saldo antes
+        Conta conta = banco.buscarConta(numero);
+        double saldoAnterior = conta.getSaldo();
 
-            // Recarrega tabelas para mostrar o saldo novo
-            atualizarInterface();
+        // executa depósito
+        banco.realizarDeposito(numero, valor);
 
-            Conta contaAtualizada = banco.buscarConta(numero);
+        // saldo depois
+        double saldoFinal = banco.buscarConta(numero).getSaldo();
 
-            String comprovante = banco.gerarComprovante(
-                    "Depósito",
-                    contaAtualizada,
-                    null,
-                    valor
-            );
+        atualizarInterface();
 
-            areaLog.append("Depósito realizado com sucesso na conta " + numero + "\n");
-            JOptionPane.showMessageDialog(this, comprovante);
+        String comprovante = banco.gerarComprovante(
+                "Depósito",
+                conta,
+                null,
+                valor,
+                saldoAnterior,
+                saldoFinal,
+                null,
+                null
+        );
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        JOptionPane.showMessageDialog(this, comprovante);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage());
+    }
     }//GEN-LAST:event_btnDepositarActionPerformed
 
     private void btnVoltarPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarPaginaActionPerformed
@@ -1027,59 +1034,75 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnSacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacarActionPerformed
         try {
-            String numero = txtContaSaque.getText().trim();
-            double valor = Double.parseDouble(txtValorSaque.getText());
+        String numero = txtContaSaque.getText().trim();
+        double valor = Double.parseDouble(txtValorSaque.getText());
 
-            banco.realizarSaque(numero, valor);
+        // saldo antes
+        Conta conta = banco.buscarConta(numero);
+        double saldoAnterior = conta.getSaldo();
 
-            // Recarrega tabelas
-            atualizarInterface();
+        banco.realizarSaque(numero, valor);
 
-            Conta contaAtualizada = banco.buscarConta(numero);
+        // saldo final
+        double saldoFinal = banco.buscarConta(numero).getSaldo();
 
-            String comprovante = banco.gerarComprovante(
-                    "Saque",
-                    contaAtualizada,
-                    null,
-                    valor
-            );
+        atualizarInterface();
 
-            areaLog.append("Saque realizado na conta " + numero + "\n");
-            JOptionPane.showMessageDialog(this, comprovante);
+        String comprovante = banco.gerarComprovante(
+                "Saque",
+                conta,
+                null,
+                valor,
+                saldoAnterior,
+                saldoFinal,
+                null,
+                null
+        );
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        JOptionPane.showMessageDialog(this, comprovante);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage());
+    }
     }//GEN-LAST:event_btnSacarActionPerformed
 
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
         try {
-            String origem = txtContaOrigem.getText().trim();
-            String destino = txtContaDestino.getText().trim();
-            double valor = Double.parseDouble(txtValorTransferencia.getText());
+        String origem = txtContaOrigem.getText().trim();
+        String destino = txtContaDestino.getText().trim();
+        double valor = Double.parseDouble(txtValorTransferencia.getText());
 
-            banco.realizarTransferencia(origem, destino, valor);
+        // saldos antes
+        Conta contaOrigem = banco.buscarConta(origem);
+        Conta contaDestino = banco.buscarConta(destino);
 
-            // Recarrega tabelas
-            atualizarInterface();
+        double saldoAnteriorOrigem = contaOrigem.getSaldo();
+        double saldoAnteriorDestino = contaDestino.getSaldo();
 
-            // rebuscar contas atualizadas
-            Conta contaOrigemAtualizada = banco.buscarConta(origem);
-            Conta contaDestinoAtualizada = banco.buscarConta(destino);
+        banco.realizarTransferencia(origem, destino, valor);
 
-            String comprovante = banco.gerarComprovante(
-                    "Transferência",
-                    contaOrigemAtualizada,
-                    contaDestinoAtualizada,
-                    valor
-            );
+        // saldos após transferência
+        double saldoFinalOrigem = banco.buscarConta(origem).getSaldo();
+        double saldoFinalDestino = banco.buscarConta(destino).getSaldo();
 
-            areaLog.append("Transferência de " + origem + " para " + destino + "\n");
-            JOptionPane.showMessageDialog(this, comprovante);
+        atualizarInterface();
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        String comprovante = banco.gerarComprovante(
+                "Transferência",
+                contaOrigem,
+                contaDestino,
+                valor,
+                saldoAnteriorOrigem,
+                saldoFinalOrigem,
+                saldoAnteriorDestino,
+                saldoFinalDestino
+        );
+
+        JOptionPane.showMessageDialog(this, comprovante);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage());
+    }
     }//GEN-LAST:event_btnTransferirActionPerformed
 
     public static void main(String args[]) {

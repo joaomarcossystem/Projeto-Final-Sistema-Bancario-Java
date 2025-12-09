@@ -126,20 +126,44 @@ public class Banco {
     }
 
     // Método auxiliar para gerar comprovante (Manteve igual)
-    public String gerarComprovante(String operacao, Conta origem, Conta destino, double valor) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== COMPROVANTE DE ").append(operacao.toUpperCase()).append(" ===\n\n");
-        sb.append("Valor: R$ ").append(valor).append("\n\n");
-        if (origem != null) {
-            sb.append("Conta Origem: ").append(origem.getNumero()).append("\n");
-            sb.append("Titular: ").append(origem.getProprietario().getNome()).append("\n");
+            public String gerarComprovante(
+                String operacao,
+                Conta origem,
+                Conta destino,
+                double valor,
+                Double saldoAnteriorOrigem,
+                Double saldoFinalOrigem,
+                Double saldoAnteriorDestino,
+                Double saldoFinalDestino
+        ) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("=== COMPROVANTE DE ").append(operacao.toUpperCase()).append(" ===\n\n");
+            sb.append("Valor: R$ ").append(valor).append("\n\n");
+
+            if (origem != null) {
+                sb.append("Conta Origem: ").append(origem.getNumero()).append("\n");
+                sb.append("Titular: ").append(origem.getProprietario().getNome()).append("\n");
+
+                if (saldoAnteriorOrigem != null) {
+                    sb.append("Saldo Anterior: R$ ").append(saldoAnteriorOrigem).append("\n");
+                    sb.append("Saldo Atual: R$ ").append(saldoFinalOrigem).append("\n\n");
+                }
+            }
+
+            if (destino != null) {
+                sb.append("Conta Destino: ").append(destino.getNumero()).append("\n");
+                sb.append("Titular: ").append(destino.getProprietario().getNome()).append("\n");
+
+                if (saldoAnteriorDestino != null) {
+                    sb.append("Saldo Anterior (Destino): R$ ").append(saldoAnteriorDestino).append("\n");
+                    sb.append("Saldo Atual (Destino): R$ ").append(saldoFinalDestino).append("\n\n");
+                }
+            }
+
+            return sb.toString();
         }
-        if (destino != null) {
-            sb.append("Conta Destino: ").append(destino.getNumero()).append("\n");
-            sb.append("Titular: ").append(destino.getProprietario().getNome()).append("\n");
-        }
-        return sb.toString();
-    }
+
 
     public List<Cliente> listarClientes() {
         return clienteDAO.listarTodos();
