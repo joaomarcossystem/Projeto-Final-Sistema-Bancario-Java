@@ -4,30 +4,83 @@ import com.unileste.projetofinal.entidades.Cliente;
 import com.unileste.projetofinal.entidades.Conta;
 import com.unileste.projetofinal.operacoes.Banco;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class MainFrame extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-    
-    private ArrayList<String> listaDeClientes = new ArrayList<>();
+
     private Banco banco;
+    // Lista auxiliar para guardar os CPFs na mesma ordem do ComboBox de Nomes
     private ArrayList<String> listaDeCpfs = new ArrayList<>();
 
     public MainFrame() {
         initComponents();
         banco = new Banco("Sistema Bancário");
-    }
-    
-        private void atualizarComboClientes() {
-        comboNomeProprietario.removeAllItems();
 
-        for (String nome : listaDeClientes) {
-            comboNomeProprietario.addItem(nome);
+        // Carrega os dados do Banco de Dados ao abrir a tela
+        atualizarInterface();
+    }
+
+    /**
+     * Método central para recarregar tabelas e combos do Banco de Dados
+     */
+    private void atualizarInterface() {
+        atualizarTabelaClientesECombo();
+        atualizarTabelaContas();
+    }
+
+    private void atualizarTabelaClientesECombo() {
+        try {
+            // 1. Limpa a tabela visual
+            DefaultTableModel model = (DefaultTableModel) tblClientes.getModel();
+            model.setRowCount(0);
+
+            // 2. Limpa o ComboBox e a lista auxiliar de CPFs
+            comboNomeProprietario.removeAllItems();
+            listaDeCpfs.clear();
+
+            // 3. Busca a lista atualizada do MySQL
+            List<Cliente> clientes = banco.listarClientes();
+
+            // 4. Preenche a tabela e o ComboBox
+            for (Cliente c : clientes) {
+                // Adiciona na tabela
+                model.addRow(new Object[]{
+                        c.getNome(),
+                        c.getCpf(),
+                        c.getEndereco(),
+                        c.getContas().size() // Nota: isso virá 0 se não carregar as contas dentro do cliente, mas ok por enquanto
+                });
+
+                // Adiciona no ComboBox e na lista de CPFs
+                comboNomeProprietario.addItem(c.getNome());
+                listaDeCpfs.add(c.getCpf());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar clientes: " + e.getMessage());
         }
     }
 
+    private void atualizarTabelaContas() {
+        try {
+            DefaultTableModel model = (DefaultTableModel) tblConta.getModel();
+            model.setRowCount(0);
+
+            List<Conta> contas = banco.listarContas();
+
+            for (Conta c : contas) {
+                model.addRow(new Object[]{
+                        c.getNumero(),
+                        (c instanceof com.unileste.projetofinal.entidades.ContaCorrente) ? "Corrente" : "Poupança",
+                        c.getProprietario().getCpf(),
+                        c.getSaldo()
+                });
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar contas: " + e.getMessage());
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -86,11 +139,11 @@ public class MainFrame extends javax.swing.JFrame {
         txtContaDeposito = new javax.swing.JTextField();
         txtValorDeposito = new javax.swing.JTextField();
         btnDepositar = new javax.swing.JButton();
+        txtValorSaque = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtContaSaque = new javax.swing.JTextField();
-        txtValorSaque = new javax.swing.JTextField();
         btnSacar = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
@@ -102,6 +155,8 @@ public class MainFrame extends javax.swing.JFrame {
         btnTransferir = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        areaLog = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Principal");
@@ -651,13 +706,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel14)
                     .addComponent(jLabel13))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(txtContaSaque))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(31, 31, 31)
+                .addComponent(txtContaSaque)
                 .addGap(85, 85, 85)
                 .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(142, 142, 142))
@@ -671,14 +721,12 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(txtContaSaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
-                            .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel14))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(btnSacar)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(255, 204, 204));
@@ -759,6 +807,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(15, 15, 15))
         );
 
+        areaLog.setColumns(20);
+        areaLog.setRows(5);
+        jScrollPane3.setViewportView(areaLog);
+
         javax.swing.GroupLayout pnlOperacoesLayout = new javax.swing.GroupLayout(pnlOperacoes);
         pnlOperacoes.setLayout(pnlOperacoesLayout);
         pnlOperacoesLayout.setHorizontalGroup(
@@ -769,20 +821,34 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(pnlOperacoesLayout.createSequentialGroup()
                 .addGap(99, 99, 99)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlOperacoesLayout.createSequentialGroup()
+                    .addGap(236, 236, 236)
+                    .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(236, Short.MAX_VALUE)))
         );
         pnlOperacoesLayout.setVerticalGroup(
             pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlOperacoesLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(pnlOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlOperacoesLayout.createSequentialGroup()
+                    .addGap(256, 256, 256)
+                    .addComponent(txtValorSaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(257, Short.MAX_VALUE)))
         );
 
         tabPaineis.addTab("Operações", pnlOperacoes);
@@ -812,8 +878,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIrParaContaMouseClicked
 
     private void btnIrParaOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaOpActionPerformed
-        tabPaineis.setSelectedComponent(pnlOperacoes);  
-        atualizarComboClientes();
+        tabPaineis.setSelectedComponent(pnlOperacoes);
+        atualizarTabelaClientesECombo(); // Garante que a lista de CPFs esteja atualizada
     }//GEN-LAST:event_btnIrParaOpActionPerformed
 
     private void btnIrParaOpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIrParaOpMouseClicked
@@ -825,27 +891,17 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIrParaSobreMouseClicked
 
     private void btnIrParaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaClienteActionPerformed
-        // TODO add your handling code here:
-        tabPaineis.setSelectedComponent(pnlCliente); 
-        
-        atualizarComboClientes();
-
+        tabPaineis.setSelectedComponent(pnlCliente);
+        atualizarTabelaClientesECombo();
     }//GEN-LAST:event_btnIrParaClienteActionPerformed
 
     private void btnIrParaContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaContaActionPerformed
-        // TODO add your handling code here:
-        tabPaineis.setSelectedComponent(pnlConta); 
-        
-        atualizarComboClientes();
-
+        tabPaineis.setSelectedComponent(pnlConta);
+        atualizarTabelaClientesECombo();
     }//GEN-LAST:event_btnIrParaContaActionPerformed
 
     private void btnIrParaSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrParaSobreActionPerformed
-        // TODO add your handling code here:
-        tabPaineis.setSelectedComponent(pnlSobre); 
-        
-        atualizarComboClientes();
-
+        tabPaineis.setSelectedComponent(pnlSobre);
     }//GEN-LAST:event_btnIrParaSobreActionPerformed
 
     private void comboTipoContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoContaActionPerformed
@@ -859,16 +915,19 @@ public class MainFrame extends javax.swing.JFrame {
 
             banco.realizarDeposito(numero, valor);
 
-            // REBUSCAR A CONTA ATUALIZADA
+            // Recarrega tabelas para mostrar o saldo novo
+            atualizarInterface();
+
             Conta contaAtualizada = banco.buscarConta(numero);
 
             String comprovante = banco.gerarComprovante(
                     "Depósito",
-                    contaAtualizada,  // agora está com saldo atualizado!
+                    contaAtualizada,
                     null,
                     valor
             );
 
+            areaLog.append("Depósito realizado com sucesso na conta " + numero + "\n");
             JOptionPane.showMessageDialog(this, comprovante);
 
         } catch (Exception e) {
@@ -877,89 +936,71 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDepositarActionPerformed
 
     private void btnVoltarPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarPaginaActionPerformed
-        // TODO add your handling code here:
         int index = tabPaineis.getSelectedIndex();
-
         if (index > 0) {
             tabPaineis.setSelectedIndex(index - 1);
         }
     }//GEN-LAST:event_btnVoltarPaginaActionPerformed
 
     private void btnProximaPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProximaPaginaActionPerformed
-        // TODO add your handling code here:
         int index = tabPaineis.getSelectedIndex();
         int total = tabPaineis.getTabCount();
-
         if (index < total - 1) {
             tabPaineis.setSelectedIndex(index + 1);
         }
     }//GEN-LAST:event_btnProximaPaginaActionPerformed
 
     private void btnCadastrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarClienteActionPerformed
-        // TODO add your handling code here:
         try {
-        String nome = txtNome.getText().trim();
-        String cpf = txtCpf.getText().trim();
-        String endereco = txtEndereco.getText().trim();
+            String nome = txtNome.getText().trim();
+            String cpf = txtCpf.getText().trim();
+            String endereco = txtEndereco.getText().trim();
 
-        // 1 — Criar o cliente
-        Cliente cliente = new Cliente(nome, cpf, endereco);
+            Cliente cliente = new Cliente(nome, cpf, endereco);
 
-        // 2 — Cadastrar no banco REAL
-        banco.cadastrarCliente(cliente);
+            // Salva no banco
+            banco.cadastrarCliente(cliente);
 
-        // 3 — Adicionar tabela visual
-        DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
-        Object[] novaLinha = { nome, cpf, endereco, 0 };
-        modelo.addRow(novaLinha);
-        comboNomeProprietario.addItem(nome);
-        lblCpfDoProp.setText(cpf);
+            // Atualiza a tela puxando os dados do banco
+            atualizarTabelaClientesECombo();
 
-        JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
+            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
-    }
+            // Limpa os campos
+            txtNome.setText("");
+            txtCpf.setText("");
+            txtEndereco.setText("");
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnCadastrarClienteActionPerformed
 
     private void btnAtualizarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarClientesActionPerformed
-        // TODO add your handling code here:
-        txtNome.setText("");
-        txtCpf.setText("");
-        txtEndereco.setText("");
+        // Atualiza a tabela com dados do banco (útil se você mudou algo manualmente no banco)
+        atualizarTabelaClientesECombo();
     }//GEN-LAST:event_btnAtualizarClientesActionPerformed
 
     private void btnExcluirLinhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirLinhaActionPerformed
-        // TODO add your handling code here:
-        int linhaSelecionada = tblClientes.getSelectedRow();
-        
-        if(linhaSelecionada == -1){
-            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada para excluir");
-        } else{
-            DefaultTableModel tabelaCliente = (DefaultTableModel) tblClientes.getModel();
-            
-            tabelaCliente.removeRow(linhaSelecionada);
-        }
+        // TODO: Para implementar excluir, você precisaria adicionar um método "excluirCliente" no Banco e DAO
+        JOptionPane.showMessageDialog(this, "Funcionalidade de exclusão ainda não implementada no Banco.");
     }//GEN-LAST:event_btnExcluirLinhaActionPerformed
 
     private void btnCriarContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarContaActionPerformed
-        // TODO add your handling code here:
-            try {
+        try {
             String cpf = lblCpfDoProp.getText();
             String tipo = comboTipoConta.getSelectedItem().toString();
             double saldo = Double.parseDouble(txtSaldo.getText());
 
             Cliente cliente = banco.buscarCliente(cpf);
 
-            Conta contaCriada = banco.abrirConta(cliente, tipo, saldo);
+            banco.abrirConta(cliente, tipo, saldo);
 
-            // Adicionar na tabela
-            DefaultTableModel modelo = (DefaultTableModel) tblConta.getModel();
-            Object[] linha = { contaCriada.getNumero(), tipo, cpf, saldo };
-            modelo.addRow(linha);
+            // Atualiza a tabela de contas
+            atualizarTabelaContas();
 
             JOptionPane.showMessageDialog(this, "Conta criada com sucesso!");
+            txtSaldo.setText("");
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -975,12 +1016,13 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSaldoActionPerformed
 
     private void comboNomeProprietarioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboNomeProprietarioItemStateChanged
-        // TODO add your handling code here:
         int index = comboNomeProprietario.getSelectedIndex();
-    
-    if (index >= 0 && index < listaDeCpfs.size()) {
-        lblCpfDoProp.setText(listaDeCpfs.get(index));
-    }
+        // Verifica se o índice é válido para evitar erro "IndexOutOfBounds"
+        if (index >= 0 && index < listaDeCpfs.size()) {
+            lblCpfDoProp.setText(listaDeCpfs.get(index));
+        } else {
+            lblCpfDoProp.setText("-");
+        }
     }//GEN-LAST:event_comboNomeProprietarioItemStateChanged
 
     private void btnSacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacarActionPerformed
@@ -989,6 +1031,9 @@ public class MainFrame extends javax.swing.JFrame {
             double valor = Double.parseDouble(txtValorSaque.getText());
 
             banco.realizarSaque(numero, valor);
+
+            // Recarrega tabelas
+            atualizarInterface();
 
             Conta contaAtualizada = banco.buscarConta(numero);
 
@@ -999,6 +1044,7 @@ public class MainFrame extends javax.swing.JFrame {
                     valor
             );
 
+            areaLog.append("Saque realizado na conta " + numero + "\n");
             JOptionPane.showMessageDialog(this, comprovante);
 
         } catch (Exception e) {
@@ -1014,6 +1060,9 @@ public class MainFrame extends javax.swing.JFrame {
 
             banco.realizarTransferencia(origem, destino, valor);
 
+            // Recarrega tabelas
+            atualizarInterface();
+
             // rebuscar contas atualizadas
             Conta contaOrigemAtualizada = banco.buscarConta(origem);
             Conta contaDestinoAtualizada = banco.buscarConta(destino);
@@ -1025,6 +1074,7 @@ public class MainFrame extends javax.swing.JFrame {
                     valor
             );
 
+            areaLog.append("Transferência de " + origem + " para " + destino + "\n");
             JOptionPane.showMessageDialog(this, comprovante);
 
         } catch (Exception e) {
@@ -1037,6 +1087,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea areaLog;
     private javax.swing.JButton btnAtualizarClientes;
     private javax.swing.JButton btnAtualizarConta;
     private javax.swing.JButton btnCadastrarCliente;
@@ -1082,6 +1133,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCPF;
     private javax.swing.JLabel lblCpfDoProp;
     private javax.swing.JLabel lblEndereco;
